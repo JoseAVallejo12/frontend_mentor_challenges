@@ -1,19 +1,22 @@
 <template>
-  <nav class="navigation-menu">
-    <lu class="menu-items">
-      <li class="menu-item"><router-link to="/">Home</router-link></li>
-      <li class="menu-item">
-        <router-link to="/qr_code">qr_code</router-link>
-      </li>
-      <li class="menu-item">
-        <router-link to="/password_generator">password_generator</router-link>
-      </li>
-    </lu>
-    <div id="indicator" class="indicator-bar"></div>
-  </nav>
-  <main>
-    <router-view />
-  </main>
+  <div class="wrapper">
+    <nav class="navigation-menu">
+      <lu class="menu-items">
+        <li class="menu-item"><router-link to="/">Home</router-link></li>
+        <li class="menu-item">
+          <router-link to="/qr_code">qr_code</router-link>
+        </li>
+        <li class="menu-item">
+          <router-link to="/password_generator">password_generator</router-link>
+        </li>
+      </lu>
+      <div id="indicator" class="indicator-bar"></div>
+    </nav>
+    <main class="main-container">
+      <router-view />
+    </main>
+    <footer class="footer">Hola footer</footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -48,7 +51,7 @@ export default {
       }
     },
     handleRightMovement(clientX: number) {
-      console.log("El mouse se está moviendo hacia la derecha");
+      // console.log("El mouse se está moviendo hacia la derecha");
       this.itemListEdithClass(true);
       if (this.indicatorBar) {
         this.indicatorBar.classList.add("right_movement");
@@ -59,7 +62,7 @@ export default {
       }
     },
     handleLeftMovement(clientX: number) {
-      console.log("El mouse se está moviendo hacia la izquierda");
+      // console.log("El mouse se está moviendo hacia la izquierda");
       this.itemListEdithClass(true);
       if (this.indicatorBar) {
         this.indicatorBar.classList.add("left_movement");
@@ -70,7 +73,7 @@ export default {
       }
     },
     handleStopMovement() {
-      console.log("El mouse no se está moviendo");
+      // console.log("El mouse no se está moviendo");
       this.itemListEdithClass();
       if (this.indicatorBar) {
         this.indicatorBar.classList.add("stop");
@@ -94,7 +97,6 @@ export default {
     this.indicatorBar = document.getElementById("indicator") as HTMLDivElement;
     document.addEventListener("mousemove", (e) => {
       const { clientX, clientY, target, movementX } = e;
-      console.log(e);
       const indicatorBar = document.querySelector(
         ".indicator-bar"
       ) as HTMLDivElement;
@@ -109,19 +111,29 @@ export default {
 
       this.handleMouseMovement(movementX, clientX);
     });
-    console.log("Component mounted.");
   },
 };
 </script>
 
 <style scoped lang="scss">
+.wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 55px auto 50px;
+  grid-column-gap: 0px;
+  grid-row-gap: 4px;
+}
 .navigation-menu {
   background-color: RGB(241, 247, 251);
   overflow: hidden;
   position: sticky;
   display: flex;
   flex-direction: column;
+
   .menu-items {
+    height: 50px;
     list-style-type: none;
     .menu-item {
       float: left;
@@ -146,6 +158,19 @@ export default {
           height: 3px;
           width: 100%;
           background-color: rgb(160, 160, 183, 1);
+          opacity: 1;
+          transition: opacity 0.4s ease-in-out;
+        }
+        &:not(.stop)::after {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: -3px;
+          right: 0;
+          height: 3px;
+          width: 100%;
+          opacity: 0;
+          transition: opacity 0.4s ease-in-out;
         }
       }
     }
